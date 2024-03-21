@@ -132,7 +132,7 @@ def main():
     global pagelist
     wordstuff = None
     pagelist = None
-    pagelist = readinput("asu-domain.txt")
+    pagelist = readinput(sys.argv[1])
     wordstuff = index(pagelist)
     pagelist = pagerank(pagelist)
     utility.process_keystrokes(pagelist, wordstuff)
