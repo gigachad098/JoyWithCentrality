@@ -3,6 +3,8 @@ import termios
 import tty
 import time
 
+import search
+
 '''
 In your search program, include utility.h.
 Then call process_keystrokes from main. This has code for real-time input, and it calls the predict method, that takes a string query, and prints the top 5 pages that match that query.
@@ -23,13 +25,18 @@ color_bkgnd_yellow = "\u001b[43;1m"
 color_bkgnd_black = "\u001b[40;1m"
 
 
-def predict(query):
+def predict(query, pagelist, wordstuff):
+    result = search.query(query, pagelist, wordstuff)
+    if result is not None:
+        for i in range(len(result)):
+            sys.stdout.write(f"{i + 1}. [{result[i][2]}] {result[i][0]}\n")
+            breakdown = result[i][1].split(result[i][3])
+            sys.stdout.write(f"{breakdown[0] + color_cyan + result[i][3] + color_green + breakdown[1]}\n")
     # this method prints the output for this query. Feel free to change this signature, and pass in the necessary information to print.
-    pass
 
 
 # processes key strokes one character at a time. Designed for real-time inputs. Call this function from your main program.
-def process_keystrokes():
+def process_keystrokes(pagelist, wordstuff):
     query = ''
     ch = ' '
 
@@ -40,8 +47,7 @@ def process_keystrokes():
         sys.stdout.write(clear_screen)
         sys.stdout.write(color_green + "Search keyword: ")
         sys.stdout.write(color_white + query + color_green + "-\n\n")
-
-        predict(query)
+        predict(query, pagelist, wordstuff)
         sys.stdout.write(color_reset)
         sys.stdout.flush()
 
